@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+require 'rperf'
+require 'server'
+require 'linux/linux_server'
+require 'linux/pidstats'
+require 'linux/iostats'
+
+command = ARGV[0]
+
+case command
+when "start"
+  conf = ARGV[1]
+  abort "You must specify a config file" if !conf
+  abort "Could not open file #{conf}" if !File.readable? conf
+
+  basedir = Time.now.strftime("%m%d-%H%M")
+  puts "Creating directory #{basedir}"
+  Dir.mkdir(basedir)
+
+  File.copy_stream(conf, "#{basedir}/conf.yaml")
+  Rperf.new(basedir).start
+
+when "stop"
+  basedir = ARGV[1]
+  abort "You must specify a directory" if !basedir
+  abort "Could not find directory #{basedir}" if !Dir.exists? basedir
+  Rperf.new(basedir).stop
+
+when "report"
+  basedir = ARGV[1]
+  abort "You must specify a directory" if !basedir
+  abort "Could not find directory #{basedir}" if !Dir.exists? basedir
+  Rperf.new(basedir).report
+
+else
+  puts "Unknown command: #{command}"
+end
