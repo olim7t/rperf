@@ -30,7 +30,7 @@ class Iostats
 
     current_time = nil
     IO.foreach(@raw_iostats) do |line|
-      if /\d\d\/\d\d\/\d\d\d\d (?<time>\d\d:\d\d:\d\d).*/ =~ line
+      if /\d{2}\/\d{2}\/\d{2,4} (?<time>\d\d:\d\d:\d\d).*/ =~ line
         current_time = time
       elsif /^(?<device>\w+)\s+\d+\.\d+\s+\d+\.\d+/ =~ line
         out_streams[device].puts "#{current_time} #{line}"
