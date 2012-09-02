@@ -7,4 +7,4 @@ set timefmt "%H:%M:%S"
 set title "Scheduler run queue"
 set nokey
 
-plot "vmstat.log" using 19:1 with lines
+plot "vmstat.log" using 1:2 with lines

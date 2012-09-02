@@ -16,4 +16,5 @@ resources/linux/gnuplot/memory.plt
 resources/linux/gnuplot/runqueue.plt
 resources/linux/gnuplot/vcs.plt
 resources/linux/perf_logs/start.sh
+resources/linux/perf_logs/timed_vmstat.sh
 resources/linux/perf_logs/stop.sh

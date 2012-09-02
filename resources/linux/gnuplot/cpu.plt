@@ -9,6 +9,6 @@ set ylabel "CPU %"
 set key outside bottom
 
 plot \
-  "vmstat.log" using 19:13 title 'User' with lines, \
-  "vmstat.log" using 19:14 title 'System' with lines, \
-  "vmstat.log" using 19:15 title 'Idle' with lines
+  "vmstat.log" using 1:14 title 'User' with lines, \
+  "vmstat.log" using 1:15 title 'System' with lines, \
+  "vmstat.log" using 1:16 title 'Idle' with lines
