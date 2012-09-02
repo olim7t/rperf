@@ -10,8 +10,7 @@ fi
 
 cat /proc/cpuinfo > ${BASEDIR}/cpuinfo.log
 
-nohup ${BASEDIR}/timed_vmstat.sh > ${BASEDIR}/vmstat.log 2>&1 <&- &
-echo $! >> ${PID_FILE}
+nohup ${BASEDIR}/timed_vmstat.sh ${BASEDIR}/vmstat.log ${PID_FILE} &
 
 nohup pidstat -w 5 > ${BASEDIR}/pidstat.log 2>&1 <&- &
 echo $! >> ${PID_FILE}
