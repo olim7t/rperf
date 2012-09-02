@@ -38,9 +38,10 @@ rperf report #{@basedir}
 
   def each_server
     @conf.each do |server_conf|
+      server_conf[:alias] = server_conf[:host] if not server_conf[:alias]
       server_class = Server.for_platform server_conf[:platform]
       if !server_class
-        puts "Skipping #{server_conf[:host]}, platform #{server_conf[:platform]} not supported"
+        puts "Skipping #{server_conf[:alias]}, platform #{server_conf[:platform]} not supported"
         next
       end
       yield server_class.new(@basedir, server_conf)

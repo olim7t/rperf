@@ -14,6 +14,7 @@ class LinuxServer < Server
   end
 
   def start
+    puts '-' * 80
     log 'deploying scripts'
     deploy_scripts()
     log 'starting log collection'
@@ -22,6 +23,7 @@ class LinuxServer < Server
   end
 
   def stop
+    puts '-' * 80
     log 'stopping log collection'
     remote_run("perf_logs/stop.sh")
     log 'downloading logs'
@@ -32,6 +34,7 @@ class LinuxServer < Server
   end
 
   def report
+    puts '-' * 80
     plot('cpu.plt', '_cpu.png')
     plot('runqueue.plt', '_runqueue.png')
     plot('memory.plt', '_memory.png')
@@ -40,11 +43,11 @@ class LinuxServer < Server
   end
 
   def log(message)
-    puts "[#{@conf[:host]}] #{message}"
+    puts "[#{@conf[:alias]}] #{message}"
   end
 
   def server_dir_in(dir)
-    subdir = File.join(dir, @conf[:host])
+    subdir = File.join(dir, @conf[:alias])
     Dir.mkdir(subdir) if not Dir.exists? subdir
     File.expand_path(subdir)
   end
@@ -80,7 +83,7 @@ class LinuxServer < Server
     Dir.chdir(@logs_dir) do
       Process.spawn(env, 'gnuplot',
                     :in => File.join(gnuplot_dir, gnuplot_script),
-                    :out => File.join(@report_dir, "#{@conf[:host]}#{output_file_suffix}"))
+                    :out => File.join(@report_dir, "#{@conf[:alias]}#{output_file_suffix}"))
     end
   end
 
