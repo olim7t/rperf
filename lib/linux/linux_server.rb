@@ -8,6 +8,9 @@ class LinuxServer < Server
     @conf = conf
     @logs_dir = server_dir_in File.join(parent_dir, "logs")
     @report_dir = File.expand_path(File.join(parent_dir, "report"))
+    @ssh_opts = {}
+    @ssh_opts[:password] = @conf[:password] if @conf[:password]
+    @ssh_opts[:keys] = [ @conf[:private_key] ] if @conf[:private_key]
   end
 
   def start
@@ -48,20 +51,20 @@ class LinuxServer < Server
 
   def deploy_scripts
     scripts_dir = File.join(File.dirname(__FILE__), '..', '..', 'resources', 'linux', 'perf_logs')
-    Net::SCP.start(@conf[:host], @conf[:user]) do |scp|
+    Net::SCP.start(@conf[:host], @conf[:user], @ssh_opts) do |scp|
       scp.upload!(scripts_dir, '.', :recursive => true)
     end
   end
 
   def remote_run(command)
-    Net::SSH.start(@conf[:host], @conf[:user]) do |ssh|
+    Net::SSH.start(@conf[:host], @conf[:user], @ssh_opts) do |ssh|
       output = ssh.exec!(command)
       puts output
     end
   end
 
   def download_tarred_logs
-    Net::SCP.start(@conf[:host], @conf[:user]) do |scp|
+    Net::SCP.start(@conf[:host], @conf[:user], @ssh_opts) do |scp|
       scp.download!('perf_logs/logs.tgz', @logs_dir)
     end
   end
